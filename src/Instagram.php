@@ -187,23 +187,28 @@ class Instagram
     }
 
     /**
-     * Get user recent media.
+     * Get user recent media
      *
-     * @param int|string $id Instagram user ID
-     * @param int $limit Limit of returned results
-     *
+     * @param integer [optional] $id        Instagram user ID
+     * @param integer [optional] $limit     Limit of returned results
+     * @param string [optional] $maxTime    The maximum timestamp of returned results
+     * @param string [optional] $minTime    The minimum timestamp of returned results
+     * @param string [optional] $maxID      The maximum ID of returned results
+     * @param string [optional] $minID      The minimum ID of returned results
      * @return mixed
      */
-    public function getUserMedia($id = 'self', $limit = 0)
-    {
-        $params = array();
-
-        if ($limit > 0) {
-            $params['count'] = $limit;
-        }
-
-        return $this->_makeCall('users/' . $id . '/media/recent', strlen($this->getAccessToken()), $params);
+    public function getUserMedia($id = 'self', $limit = 0, $maxTime = '', $minTime = '', $maxID = '', $minID = '') {
+        return $this->_makeCall('users/' . $id . '/media/recent', ($id === 'self'), 
+            array(
+                'count' => $limit,
+                'max_timestamp' => $maxTime,
+                'min_timestamp' => $minTime,
+                'max_id' => $maxID,
+                'min_id' => $minID
+            )
+        );
     }
+
 
     /**
      * Get the liked photos of a user.
